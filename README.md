@@ -1,68 +1,28 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+-i used three api calls:'https://restcountries.eu/rest/v2/all' to fetch all the countries and their details, and the 
+openweathermap api to show the weather detail of the present day, and another call for the weather 
+forecast for the next few HOURS, not days, with the openweathermap api also
 
-## Available Scripts
+-the openweathermap api doesn't allow me to make more than 60 api calls/min, so when you open the app at first hand,
+you will get the display of only the 7 first capitals that were fetched with the 'restcountries', not all the capitals 
+of the world. of course, you can search for another capital in the navbar, and display the results directly. However, to
+search for a capital, you will need to write its name exactly as it is officialy stated in english to get the 
+right response. ex: to search for washington, you wil need to type in the navbar search text field: 
+'washington, D.C.' not only washington
 
-In the project directory, you can run:
+-i did not make a 5 day weather forecast, simply because this feature isn't supported by the free 
+version of the openweathermap api, instead, i chose to display the weather forecast for the next upcoming 15 hours
+of the selected capital
 
-### `npm start`
+- to view the details weather of a capital, you will need to click on its name in the table
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- you can pin and unpin capitals to favorit by clicking on the stars displayed in the far right of the table
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+- to navigate between home and favorite section, you have to click on the home and star icons that are displayed
+in the far left of the navbar
 
-### `npm test`
+- you can't pin and unpin capitals when you are in the favorit section
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+-if you refresh your app, all the modification that you've made (ex: pining to favorit and searching for other capitals)
+will be lost
 
-### `npm run build`
-
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+-i did not make filters or any search options on any of the tables that are displayed
