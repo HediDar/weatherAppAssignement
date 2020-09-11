@@ -15,14 +15,14 @@ of the selected capital
 
 - to view the details weather of a capital, you will need to click on its name in the table
 
-- you can pin and unpin capitals to favorit by clicking on the stars displayed in the far right of the table
+- you can pin and unpin capitals to favorite by clicking on the stars displayed in the far right of the table
 
 - to navigate between home and favorite section, you have to click on the home and star icons that are displayed
 in the far left of the navbar
 
-- you can't pin and unpin capitals when you are in the favorit section
+- you can't pin and unpin capitals when you are in the favorite section
 
--if you refresh your app, all the modification that you've made (ex: pining to favorit and searching for other capitals)
+-if you refresh your app, all the modification that you've made (ex: pining to favorite and searching for other capitals)
 will be lost
 
 -i did not make filters or any search options on any of the tables that are displayed
