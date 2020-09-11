@@ -25,4 +25,4 @@ in the far left of the navbar
 - if you refresh your app, all the modification that you've made (ex: pining to favorite and searching for other capitals)
 will be lost
 
--i did not make filters or any search options on any of the tables that are displayed
+- i did not make filters or any search options on any of the tables that are displayed
