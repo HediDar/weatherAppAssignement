@@ -4,7 +4,7 @@ import Detail from "./detail";
 import ActualDay from "./actualDay";
 
 const API_key = "3ca7473536ef714919ad34878d22a7af";
-
+const test="gee";
 class Details extends Component {
   constructor() {
     super();

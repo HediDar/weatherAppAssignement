@@ -1,0 +1,35 @@
+{
+    "extends": [
+        "airbnb",
+        "prettier",
+        "prettier/react",
+        "eslint:recommended",
+        "plugin:react/recommended"
+    ],
+    "globals": {
+      "afterAll":true,
+      "afterEach":true,
+      "beforeAll":true,
+      "beforeEach":true,
+      "describe":true,
+      "expect":true,
+      "fit":true,
+      "it":true,
+      "jasmine":true,
+      "xit":true,
+      "jest":true
+    },
+    "env": {
+      "browser": true,
+      "node": true,
+      "jasmine": true
+    },
+    "rules": {
+      "no-console": "off",
+      "no-alert": "off",
+      "global-require":"off",
+      "react/no-find-dom-node":"off",
+      "linebreak-style": ["off", "windows"]
+    },
+    "parser": "babel-eslint"
+  }
