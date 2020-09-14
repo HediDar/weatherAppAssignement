@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { countriesCalls, callWeatherByRefresh } from "./myAPIS";
+
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import Cities from "./components/cities";
 import Details from "./components/details";
@@ -11,20 +13,18 @@ import NavBar from "./components/navbar";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import "./App.css";
 
-toast.configure()
+toast.configure();
 const API_key = "3ca7473536ef714919ad34878d22a7af";
 
 class App extends Component {
-
- notify =(message)=>{
-
-toast(message);
-
+  notify = (message) => {
+    toast(message);
   };
   constructor() {
     super();
-    
+
     this.state = {
+      myCountries: [],
       myCities: [],
       favCapitals: [],
       increment: -1,
@@ -35,9 +35,76 @@ toast(message);
     };
   }
 
-  
+  callAPIWeather = async (country,refresh) => {
+    if (refresh === 1) this.setState({ increment: -1 });
+    this.pays = this.state.myCities;
+
+   
+    try {
+      console.log(country);
+      const weatherRes = await callWeatherByRefresh(country.capital, country.alpha2code);
+      
+      this.test = 0;
+
+      let i = this.state.increment;
+      i++;
+      this.setState({ increment: i });
+
+      let tempCelcius = weatherRes.data["main"]["temp"];
+      let temperatureRound = Math.trunc(tempCelcius) + "°";
+
+      this.pays.push({
+        id: this.state.increment,
+        name: country["name"],
+        capital: country["capital"],
+        code: country["alpha2Code"],
+        flag: country["flag"],
+        weather: weatherRes.data.weather[0]["main"],
+        temperature: temperatureRound,
+        icon: weatherRes.data.weather[0]["icon"],
+        favorite: 0,
+        starPath: "/icons/starA.jpg",
+        humidity: weatherRes.data["main"]["humidity"],
+        pressure: weatherRes.data["main"]["pressure"],
+        windSpeed: weatherRes.data["wind"]["speed"],
+        windAngle: weatherRes.data["wind"]["deg"],
+      });
+
+      console.log(this.pays);
+
+      this.setState({ myCities: this.pays});
+    } catch (e) {
+      console.log(e);
+    }
+
+    console.log("state is" + this.state.myCities);
+  };
+
+  CallAPICountries = async () => {
+    try {
+      //this.pays = [];
+      this.k = 0;
+      const responseCountries = await countriesCalls();
+      this.setState({ countriesResponse: responseCountries.data });
+      this.state.countriesResponse.forEach((el) => {
+        if (this.k < 3) {
+          try {
+            this.callAPIWeather(el,0);
+            this.k++;
+          } catch (e) {
+            console.log(e);
+          }
+        }
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   componentDidMount() {
-    this.callAPI();
+    //const response=await
+    let response = this.CallAPICountries();
+    
   }
 
   callAPI = async () => {
@@ -130,7 +197,8 @@ toast(message);
   };
 
   handleStar = (citieId) => {
-    if (this.state.inFav === 1) this.notify("you can not pin and unpin in favorite section!");
+    if (this.state.inFav === 1)
+      this.notify("you can not pin and unpin in favorite section!");
     else {
       const cities = [...this.state.myCities];
       //i reasign the citi with id citieId, fave and path only changed
@@ -168,23 +236,23 @@ toast(message);
     }
   };
 
-  handleNav = () => {
-    console.log("gfgg");
-  };
+  handleNav = () => {};
 
   handleSearch = (value) => {
     this.testHave = 0;
     this.testExists = 0;
 
-    if (value.localeCompare("") === 0) {console.log('empty');this.notify("you have typed an empty value!");}
-    else {
+    if (value.localeCompare("") === 0) {
+      console.log("empty");
+      this.notify("you have typed an empty value!");
+    } else {
       this.state.myCities.forEach((el) => {
         if (
           el["capital"].toUpperCase().localeCompare(value.toUpperCase()) === 0
         )
           this.testHave = 1;
       });
-//// we exclude the vatican and the holy see as countries cause they have the same capital as italy
+      //// we exclude the vatican and the holy see as countries cause they have the same capital as italy
       this.state.countriesResponse.forEach((el2) => {
         if (
           el2["capital"].toUpperCase().localeCompare(value.toUpperCase()) === 0
@@ -200,7 +268,9 @@ toast(message);
           ) {
             const cities = [...this.state.myCities];
 
-            this.callAPI2(el2, cities, 0);
+            this.callAPIWeather(el2,0);
+            
+            //this.callAPI2(el2, cities, 0);
 
             this.setState({ myCities: cities });
           }
@@ -208,7 +278,7 @@ toast(message);
       });
       if (this.testHave === 1) this.notify("capital already displayed!");
       if (this.testExists === 0 && this.testHave === 0)
-      this.notify("not a capital!");
+        this.notify("not a capital!");
     }
   };
 
@@ -235,31 +305,31 @@ toast(message);
   };
 
   handleFav = () => {
-    if (this.state.inFav===0){
-    this.setState({ favPath: "/icons/favA.jpg" });
-    this.setState({ homePath: "/icons/homeD.png" });
+    if (this.state.inFav === 0) {
+      this.setState({ favPath: "/icons/favA.jpg" });
+      this.setState({ homePath: "/icons/homeD.png" });
 
-    let cit = [];
+      let cit = [];
 
-    this.j = -1;
-    ////////i sort the array du favori au non favori
-    this.state.myCities.forEach((el) => {
-      if (el.favorite === 1) {
-        this.j++;
-        cit.push(this.state.myCities[el.id]);
-      }
-    });
+      this.j = -1;
+      ////////i sort the array du favori au non favori
+      this.state.myCities.forEach((el) => {
+        if (el.favorite === 1) {
+          this.j++;
+          cit.push(this.state.myCities[el.id]);
+        }
+      });
 
-    this.state.myCities.forEach((e2) => {
-      if (e2.favorite === 0) {
-        this.j++;
+      this.state.myCities.forEach((e2) => {
+        if (e2.favorite === 0) {
+          this.j++;
 
-        cit.push(this.state.myCities[e2.id]);
-      }
-    });
-    this.setState({ myCities: cit });
-    this.setState({ inFav: 1 });
-  }
+          cit.push(this.state.myCities[e2.id]);
+        }
+      });
+      this.setState({ myCities: cit });
+      this.setState({ inFav: 1 });
+    }
   };
 
   render() {
@@ -267,8 +337,8 @@ toast(message);
       <Router>
         <React.Fragment>
           <Switch>
-          <Route path="/details" exact component={Details} />
-            <Route path="/"  component={{ Cities, NavBar }}>
+            <Route path="/details" exact component={Details} />
+            <Route path="/" component={{ Cities, NavBar }}>
               <NavBar
                 onSearch={this.handleSearch}
                 onHome={this.handleHome}
@@ -279,8 +349,6 @@ toast(message);
               />
               <Cities cities={this.state.myCities} onStar={this.handleStar} />
             </Route>
-
-            
           </Switch>
         </React.Fragment>
       </Router>

@@ -13,12 +13,10 @@ class Cities extends Component {
   render() {
     
     // const vals = this.state.myCities;
-    //console.log(this.props.cities.length);
     //return <h1>a</h1>
     if (this.props.cities.length === 0) {
       return (null);
     } else {
-      console.log(this.props.cities);
       return (
         <div>
           <table className="table">

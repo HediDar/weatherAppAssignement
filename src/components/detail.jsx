@@ -5,7 +5,6 @@ class Detail extends Component {
     this.tempMin = Math.trunc(this.props.detail.tempMin);
     this.tempMax = Math.trunc(this.props.detail.tempMax);
 
-    console.log(this.props.detail);
     return (
       <tr>
         <td>{this.props.detail.time}</td>

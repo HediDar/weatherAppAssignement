@@ -40,7 +40,7 @@ this.i=-1;
 			id:this.i,
 			time: el['dt_txt'],
 			tempMin: el["main"]["temp_min"],
-			tempMax: el["main"]["temp_min"],
+			tempMax: el["main"]["temp_max"],
 			windSpeed: el["wind"]["speed"],
 			windAngle: el["wind"]["deg"],
 			humidity: el["main"]["humidity"],
