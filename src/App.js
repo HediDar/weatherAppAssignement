@@ -9,12 +9,12 @@ import Cities from "./components/cities";
 import Details from "./components/details";
 
 import NavBar from "./components/navbar";
+import PropTypes from "prop-types";
 
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import "./App.css";
 
 toast.configure();
-const API_key = "3ca7473536ef714919ad34878d22a7af";
 
 class App extends Component {
   notify = (message) => {
@@ -24,7 +24,6 @@ class App extends Component {
     super();
 
     this.state = {
-      myCountries: [],
       myCities: [],
       favCapitals: [],
       increment: -1,
@@ -35,15 +34,16 @@ class App extends Component {
     };
   }
 
-  callAPIWeather = async (country,refresh) => {
+  callAPIWeather = async (country, refresh) => {
     if (refresh === 1) this.setState({ increment: -1 });
     this.pays = this.state.myCities;
 
-   
     try {
-      console.log(country);
-      const weatherRes = await callWeatherByRefresh(country.capital, country.alpha2code);
-      
+      const weatherRes = await callWeatherByRefresh(
+        country.capital,
+        country.alpha2code
+      );
+
       this.test = 0;
 
       let i = this.state.increment;
@@ -63,21 +63,17 @@ class App extends Component {
         temperature: temperatureRound,
         icon: weatherRes.data.weather[0]["icon"],
         favorite: 0,
-        starPath: "/icons/starA.jpg",
+        starPath: "/icons/starD.png",
         humidity: weatherRes.data["main"]["humidity"],
         pressure: weatherRes.data["main"]["pressure"],
         windSpeed: weatherRes.data["wind"]["speed"],
         windAngle: weatherRes.data["wind"]["deg"],
       });
 
-      console.log(this.pays);
-
-      this.setState({ myCities: this.pays});
+      this.setState({ myCities: this.pays });
     } catch (e) {
       console.log(e);
     }
-
-    console.log("state is" + this.state.myCities);
   };
 
   CallAPICountries = async () => {
@@ -89,7 +85,7 @@ class App extends Component {
       this.state.countriesResponse.forEach((el) => {
         if (this.k < 3) {
           try {
-            this.callAPIWeather(el,0);
+            this.callAPIWeather(el, 0);
             this.k++;
           } catch (e) {
             console.log(e);
@@ -103,98 +99,8 @@ class App extends Component {
 
   componentDidMount() {
     //const response=await
-    let response = this.CallAPICountries();
-    
+    this.CallAPICountries();
   }
-
-  callAPI = async () => {
-    if (this.state.countriesResponse.length === 0) {
-      const apiCall1 = await fetch("https://restcountries.eu/rest/v2/all");
-      const response1 = await apiCall1.json();
-      this.setState({ countriesResponse: response1 });
-    }
-    this.secondCall();
-  };
-
-  secondCall = () => {
-    this.pays = [];
-    let k = 0;
-
-    this.state.countriesResponse.forEach((el) => {
-      k++;
-      if (k < 8) this.callAPI2(el, this.pays, 1);
-    });
-  };
-
-  callAPI2 = async (el, pays, refresh) => {
-    if (refresh === 1) this.setState({ increment: -1 });
-
-    const apiCall2 = await fetch(
-      "http://api.openweathermap.org/data/2.5/weather?q=" +
-        el["capital"] +
-        "," +
-        el["alpha2Code"] +
-        "&appid=" +
-        API_key +
-        "&units=metric"
-    );
-    const response2 = await apiCall2.json();
-
-    try {
-      this.test = 0;
-
-      let i = this.state.increment;
-      i++;
-      this.setState({ increment: i });
-
-      let tempCelcius = response2["main"]["temp"];
-      let temperatureRound = Math.trunc(tempCelcius) + "°";
-
-      this.state.favCapitals.forEach((e0) => {
-        if (el["capital"].localeCompare(e0) === 0) {
-          this.test = 1;
-          pays.push({
-            id: this.state.increment,
-            name: el["name"],
-            capital: el["capital"],
-            code: el["alpha2Code"],
-            flag: el["flag"],
-            weather: response2.weather[0]["main"],
-            temperature: temperatureRound,
-            icon: response2.weather[0]["icon"],
-            favorite: 1,
-            starPath: "/icons/starA.jpg",
-            humidity: response2["main"]["humidity"],
-            pressure: response2["main"]["pressure"],
-            windSpeed: response2["wind"]["speed"],
-            windAngle: response2["wind"]["deg"],
-          });
-        }
-      });
-
-      if (this.test === 0) {
-        pays.push({
-          id: this.state.increment,
-          name: el["name"],
-          capital: el["capital"],
-          code: el["alpha2Code"],
-          flag: el["flag"],
-          weather: response2.weather[0]["main"],
-          temperature: temperatureRound,
-          icon: response2.weather[0]["icon"],
-          favorite: 0,
-          starPath: "/icons/starD.png",
-          humidity: response2["main"]["humidity"],
-          pressure: response2["main"]["pressure"],
-          windSpeed: response2["wind"]["speed"],
-          windAngle: response2["wind"]["deg"],
-        });
-      }
-    } catch (error) {
-      console.error(error);
-    }
-    this.setState({ myCities: pays });
-  };
 
   handleStar = (citieId) => {
     if (this.state.inFav === 1)
@@ -227,10 +133,6 @@ class App extends Component {
       cities[citieId].pressure = this.state.myCities[citieId].pressure;
       cities[citieId].windSpeed = this.state.myCities[citieId].windSpeed;
       cities[citieId].windAngle = this.state.myCities[citieId].windAngle;
-      /*if (this.myFav.length>0){
-        
-    this.setState({ favCapitals: this.myFav });
-}*/
 
       this.setState({ myCities: cities });
     }
@@ -268,8 +170,8 @@ class App extends Component {
           ) {
             const cities = [...this.state.myCities];
 
-            this.callAPIWeather(el2,0);
-            
+            this.callAPIWeather(el2, 0);
+
             //this.callAPI2(el2, cities, 0);
 
             this.setState({ myCities: cities });
@@ -356,4 +258,23 @@ class App extends Component {
   }
 }
 
+App.propTypes = {
+  myCities: PropTypes.array,
+  favCapitals: PropTypes.array,
+  countriesResponse: PropTypes.array,
+  homePath: PropTypes.string,
+  favPath: PropTypes.string,
+  inFav: PropTypes.number,
+  increment: PropTypes.number,
+};
+
+App.defaultProps = {
+  myCities: [],
+  favCapitals: [],
+  countriesResponse: [],
+  homePath: "/icons/homeA.png",
+  favPath: "/icons/favD.png",
+  inFav: 0,
+  increment: -1,
+};
 export default App;

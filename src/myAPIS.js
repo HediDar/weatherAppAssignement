@@ -17,7 +17,6 @@ export async function WeatherOfTheDayCall(countriesResult) {
 
 export async function callWeatherByRefresh(capital,code) {
   try {
-	  console.log('in refresh');
     const response = await axios.get(
       "http://api.openweathermap.org/data/2.5/weather?q=" +capital +
         "," +code +
