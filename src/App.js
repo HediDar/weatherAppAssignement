@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import { countriesCalls, callWeatherByRefresh } from "./myAPIS";
+import { countriesCalls } from "./myAPIS";
 
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -24,6 +24,7 @@ class App extends Component {
     super();
 
     this.state = {
+      inHome: 1,
       myCities: [],
       favCapitals: [],
       increment: -1,
@@ -31,10 +32,11 @@ class App extends Component {
       favPath: "/icons/favD.png",
       countriesResponse: [],
       inFav: 0,
+      searchValue: "",
     };
   }
 
-  callAPIWeather = async (country, refresh) => {
+  /* callAPIWeather = async (country, refresh) => {
     if (refresh === 1) this.setState({ increment: -1 });
     this.pays = this.state.myCities;
 
@@ -74,32 +76,42 @@ class App extends Component {
     } catch (e) {
       console.log(e);
     }
-  };
+  };*/
 
   CallAPICountries = async () => {
-    try {
-      //this.pays = [];
-      this.k = 0;
-      const responseCountries = await countriesCalls();
-      this.setState({ countriesResponse: responseCountries.data });
-      this.state.countriesResponse.forEach((el) => {
-        if (this.k < 3) {
-          try {
-            this.callAPIWeather(el, 0);
-            this.k++;
-          } catch (e) {
-            console.log(e);
-          }
-        }
-      });
-    } catch (e) {
-      console.log(e);
-    }
+    this.pays = [];
+    this.id = -1;
+    const responseCountries = await countriesCalls();
+    this.k = -1;
+    responseCountries.data.forEach((el) => {
+      this.k++;
+      if (this.k < 3) {
+        this.id++;
+        this.pays.push({
+          id: this.id,
+          name: el["name"],
+          capital: el["capital"],
+          code: el["alpha2Code"],
+          flag: el["flag"],
+          // weather: weatherRes.data.weather[0]["main"],
+          // temperature: temperatureRound,
+          // icon: weatherRes.data.weather[0]["icon"],
+          // favorite: 0,
+          // starPath: "/icons/starD.png",
+          // humidity: weatherRes.data["main"]["humidity"],
+          // pressure: weatherRes.data["main"]["pressure"],
+          // windSpeed: weatherRes.data["wind"]["speed"],
+          // windAngle: weatherRes.data["wind"]["deg"],
+        });
+      }
+    });
+    this.setState({ countriesResponse: this.pays });
+    // console.log(this.state.countriesResponse);
   };
 
   componentDidMount() {
     //const response=await
-    this.CallAPICountries();
+    //this.CallAPICountries();
   }
 
   handleStar = (citieId) => {
@@ -141,97 +153,17 @@ class App extends Component {
   handleNav = () => {};
 
   handleSearch = (value) => {
-    this.testHave = 0;
-    this.testExists = 0;
-
-    if (value.localeCompare("") === 0) {
-      console.log("empty");
-      this.notify("you have typed an empty value!");
-    } else {
-      this.state.myCities.forEach((el) => {
-        if (
-          el["capital"].toUpperCase().localeCompare(value.toUpperCase()) === 0
-        )
-          this.testHave = 1;
-      });
-      //// we exclude the vatican and the holy see as countries cause they have the same capital as italy
-      this.state.countriesResponse.forEach((el2) => {
-        if (
-          el2["capital"].toUpperCase().localeCompare(value.toUpperCase()) === 0
-        ) {
-          this.testExists = 1;
-          if (
-            this.testHave === 0 &&
-            el2["name"].toUpperCase().localeCompare("vatican".toUpperCase()) !==
-              0 &&
-            el2["name"]
-              .toUpperCase()
-              .localeCompare("holy see".toUpperCase()) !== 0
-          ) {
-            const cities = [...this.state.myCities];
-
-            this.callAPIWeather(el2, 0);
-
-            //this.callAPI2(el2, cities, 0);
-
-            this.setState({ myCities: cities });
-          }
-        }
-      });
-      if (this.testHave === 1) this.notify("capital already displayed!");
-      if (this.testExists === 0 && this.testHave === 0)
-        this.notify("not a capital!");
-    }
+    this.setState({ searchValue: value });
   };
 
   handleHome = () => {
-    //cela pour empecher de manipuler les etoiles dans longlet favoir
-    this.setState({ inFav: 0 });
-
-    this.setState({ homePath: "/icons/homeA.png" });
-    this.setState({ favPath: "/icons/favD.png" });
-    this.cities2 = [];
-
-    for (let i = 0; i < this.state.myCities.length; i++) {
-      this.state.myCities.forEach((el) => {
-        if (el.id === i) {
-          this.cities2.push(el);
-          this.cities2[this.cities2.length - 1].id = i;
-          return;
-        }
-      });
-    }
-
-    this.setState({ myCities: this.cities2 });
-    //this.callAPI();
+    this.setState({ inHome: 1,favPath:"/icons/favD.png",homePath:"/icons/homeA.png" });
   };
 
   handleFav = () => {
-    if (this.state.inFav === 0) {
-      this.setState({ favPath: "/icons/favA.jpg" });
-      this.setState({ homePath: "/icons/homeD.png" });
+    this.setState({ inHome: 0,favPath:"/icons/favA.jpg",homePath:"/icons/homeD.png" });
 
-      let cit = [];
-
-      this.j = -1;
-      ////////i sort the array du favori au non favori
-      this.state.myCities.forEach((el) => {
-        if (el.favorite === 1) {
-          this.j++;
-          cit.push(this.state.myCities[el.id]);
-        }
-      });
-
-      this.state.myCities.forEach((e2) => {
-        if (e2.favorite === 0) {
-          this.j++;
-
-          cit.push(this.state.myCities[e2.id]);
-        }
-      });
-      this.setState({ myCities: cit });
-      this.setState({ inFav: 1 });
-    }
+  
   };
 
   render() {
@@ -249,7 +181,7 @@ class App extends Component {
                 homePath={this.state.homePath}
                 favPath={this.state.favPath}
               />
-              <Cities cities={this.state.myCities} onStar={this.handleStar} />
+              <Cities searchValue={this.state.searchValue} inHome={this.state.inHome} />
             </Route>
           </Switch>
         </React.Fragment>

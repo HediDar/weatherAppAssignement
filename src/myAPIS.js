@@ -2,7 +2,7 @@ import axios from "axios";
 
 const API_key = "3ca7473536ef714919ad34878d22a7af";
 
-export function callWeatherByRefresh(capital, code) {
+export function callWeatherByCitie(capital, code) {
   return axios.get(
     "http://api.openweathermap.org/data/2.5/weather?q=" +
       capital +
