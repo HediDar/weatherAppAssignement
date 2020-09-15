@@ -1,42 +1,36 @@
-import React, { Component } from "react";
-class Detail extends Component {
-  render() {
-    this.imagePathWeater = "/icons/" + this.props.detail.icon + ".png";
-    this.tempMin = Math.trunc(this.props.detail.tempMin);
-    this.tempMax = Math.trunc(this.props.detail.tempMax);
+import React from "react";
+const Detail = (props) => {
+  let imagePathWeater = "/icons/" + props.detail.icon + ".png";
+  let tempMin = Math.trunc(props.detail.tempMin);
+  let tempMax = Math.trunc(props.detail.tempMax);
 
-    return (
-      <tr>
-        <td>{this.props.detail.time}</td>
-        <td>{this.props.detail.weather}</td>
-        <td>
-          <img
-            src={this.imagePathWeater}
-            style={{ width: 50, height: 30 }}
-            alt=""
-          />
-        </td>
-        <td>
-          {this.tempMin}
-          {"°"}
-        </td>
-        <td>
-          {this.tempMax}
-          {"°"}
-        </td>
-        <td>
-          {this.props.detail.windSpeed}
-          {"km/h"}
-        </td>
-        <td>
-          {this.props.detail.windAngle}
-          {"°"}
-        </td>
-        <td>{this.props.detail.humidity}</td>
-        <td>{this.props.detail.pressure}</td>
-      </tr>
-    );
-  }
-}
+  return (
+    <tr>
+      <td>{props.detail.time}</td>
+      <td>{props.detail.weather}</td>
+      <td>
+        <img src={imagePathWeater} style={{ width: 50, height: 30 }} alt="" />
+      </td>
+      <td>
+        {tempMin}
+        {"°"}
+      </td>
+      <td>
+        {tempMax}
+        {"°"}
+      </td>
+      <td>
+        {props.detail.windSpeed}
+        {"km/h"}
+      </td>
+      <td>
+        {props.detail.windAngle}
+        {"°"}
+      </td>
+      <td>{props.detail.humidity}</td>
+      <td>{props.detail.pressure}</td>
+    </tr>
+  );
+};
 
 export default Detail;

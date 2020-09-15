@@ -2,9 +2,8 @@ import React, { Component } from "react";
 import NavBar2 from "./navbarHome";
 import Detail from "./detail";
 import ActualDay from "./actualDay";
-import { detailCalls } from "../myAPIS";
-
-const API_key = "3ca7473536ef714919ad34878d22a7af";
+import { detailCalls } from "../domain/myAPIS";
+import PropTypes from "prop-types";
 
 class Details extends Component {
   constructor() {
@@ -66,11 +65,11 @@ class Details extends Component {
           <h1>no data selected</h1>
         </React.Fragment>
       );
-    if ( typeof this.state.myResponse!=="undefined") {
+    if (typeof this.state.myResponse !== "undefined") {
       this.imagePathWeater =
         "/icons/" + this.props.history.location.state.theCitie.icon + ".png";
 
-console.log(this.state);
+      console.log(this.state);
 
       if (this.state.myResponse.length > 0) {
         // console.log("weather detail is");
@@ -91,7 +90,7 @@ console.log(this.state);
             <h3 style={{ textAlign: "center" }}>
               Forecast for 5 different times
             </h3>
-            <table className="table" >
+            <table className="table">
               <thead style={{ fontSize: 22 }}>
                 <tr>
                   <th>Date and time</th>
@@ -134,5 +133,15 @@ console.log(this.state);
     }
   }
 }
+
+Details.propTypes = {
+  myResponse: PropTypes.array,
+  weatherDetail: PropTypes.array,
+};
+
+Details.defaultProps = {
+  myResponse: [],
+  weatherDetail: [],
+};
 
 export default Details;

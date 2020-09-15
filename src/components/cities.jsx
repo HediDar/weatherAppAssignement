@@ -1,10 +1,12 @@
 //import React from "react";
 import React, { Component } from "react";
-import { countriesCalls } from "../myAPIS";
+import { countriesCalls } from "../domain/myAPIS";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Citie from "./citie";
 import "../css-loader.css";
+import PropTypes from "prop-types";
+
 
 //import Citie from "./components/citie";
 
@@ -18,10 +20,7 @@ class Cities extends Component {
   };
 
   state = {
-    favCapitals: [],
     increment: -1,
-    homePath: "/icons/homeA.png",
-    favPath: "/icons/favD.png",
     countriesResponse: [],
     AllcountriesResponse: [],
     inHome: 1,
@@ -85,14 +84,12 @@ class Cities extends Component {
         this.loop = this.state.countriesResponse;
         console.log(this.props.searchValue.toUpperCase());
         this.loop.forEach((el) => {
-          // console.log(el.capital);
           if (
             el["capital"]
               .toUpperCase()
               .localeCompare(this.props.searchValue.toUpperCase()) === 0
           )
             this.testHave = 1;
-          //console.log(this.testHave);
         });
         //// we exclude the vatican and the holy see as countries cause they have the same capital as italy
         this.state.AllcountriesResponse.forEach((el2) => {
@@ -204,5 +201,21 @@ class Cities extends Component {
     }
   }
 }
+
+Cities.propTypes = {
+  AllcountriesResponse: PropTypes.array,
+  countriesResponse: PropTypes.array,
+  increment: PropTypes.number,
+  inHome:PropTypes.number,
+  searchValue:PropTypes.string
+};
+
+Cities.defaultProps = {
+  AllcountriesResponse: [],
+  countriesResponse: [],
+  increment: -1,
+  inHome: 1,
+  searchValue: ""
+};
 
 export default Cities;

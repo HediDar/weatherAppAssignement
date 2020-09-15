@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { callWeatherByCitie } from "../myAPIS";
+import { callWeatherByCitie } from "../domain/myAPIS";
+import PropTypes from "prop-types";
+
 
 class Citie extends Component {
   state = {
@@ -14,7 +16,6 @@ class Citie extends Component {
   }
 
   callAPIWeather = async (country, refresh) => {
-    //if (refresh === 1) this.setState({ increment: -1 });
 
     try {
       const weatherRes = await callWeatherByCitie(
@@ -28,13 +29,6 @@ class Citie extends Component {
     }
   };
 
-  /*handleStar = () => {
-    if (this.state.fav === 0) {
-      this.setState({ fav: 1, StarPath: "/icons/starA.jpg" });
-    } else {
-      this.setState({ fav: 0, StarPath: "/icons/starD.png" });
-    }
-  };*/
   render() {
     if (this.state.citieWeatherData.length === 0)
       return (
@@ -50,7 +44,7 @@ class Citie extends Component {
       if (this.props.citie.favorite === 0)
         this.starPathing = "/icons/starD.png";
       else this.starPathing = "/icons/starA.jpg";
-      
+
       return (
         <tr>
           <td>
@@ -65,7 +59,10 @@ class Citie extends Component {
               <Link
                 to={{
                   pathname: `/details`,
-                  state: { weather: this.state.citieWeatherData,theCitie:this.props.citie },
+                  state: {
+                    weather: this.state.citieWeatherData,
+                    theCitie: this.props.citie,
+                  },
                 }}
               >
                 {this.props.citie.capital}, {this.props.citie.name}{" "}
@@ -96,5 +93,13 @@ class Citie extends Component {
     }
   }
 }
+
+Citie.propTypes = {
+  citieWeatherData: PropTypes.array,
+};
+
+Citie.defaultProps = {
+  citieWeatherData: [],
+};
 
 export default Citie;
