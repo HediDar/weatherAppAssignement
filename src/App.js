@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import {countriesCalls} from "./domain/myAPIS";
+import { countriesCalls } from "./domain/myAPIS";
 
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -142,7 +142,9 @@ App.propTypes = {
   homePath: PropTypes.string,
   favPath: PropTypes.string,
   inFav: PropTypes.number,
+  inHome: PropTypes.number,
   increment: PropTypes.number,
+  searchValue: PropTypes.string,
 };
 
 App.defaultProps = {
@@ -152,6 +154,8 @@ App.defaultProps = {
   homePath: "/icons/homeA.png",
   favPath: "/icons/favD.png",
   inFav: 0,
+  inHome: 1,
   increment: -1,
+  searchValue: "",
 };
 export default App;
