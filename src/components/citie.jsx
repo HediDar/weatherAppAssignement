@@ -50,6 +50,7 @@ class Citie extends Component {
       if (this.props.citie.favorite === 0)
         this.starPathing = "/icons/starD.png";
       else this.starPathing = "/icons/starA.jpg";
+      
       return (
         <tr>
           <td>
@@ -64,7 +65,7 @@ class Citie extends Component {
               <Link
                 to={{
                   pathname: `/details`,
-                  state: { citie: this.props.citie },
+                  state: { weather: this.state.citieWeatherData,theCitie:this.props.citie },
                 }}
               >
                 {this.props.citie.capital}, {this.props.citie.name}{" "}

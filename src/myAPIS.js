@@ -14,6 +14,17 @@ export function callWeatherByCitie(capital, code) {
   );
 }
 
+export function detailCalls(capital) {
+  
+  return axios.get(
+    "http://api.openweathermap.org/data/2.5/forecast?q=" +
+      capital +
+      "&cnt=5&appid=" +
+      API_key +
+      "&units=metric"
+  );
+}
+
 export function countriesCalls() {
   return axios.get("https://restcountries.eu/rest/v2/all");
 }

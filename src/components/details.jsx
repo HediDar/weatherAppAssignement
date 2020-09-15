@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import NavBar2 from "./navbarHome";
 import Detail from "./detail";
 import ActualDay from "./actualDay";
+import { detailCalls } from "../myAPIS";
 
 const API_key = "3ca7473536ef714919ad34878d22a7af";
 
@@ -10,84 +11,92 @@ class Details extends Component {
     super();
     this.state = {
       myResponse: [],
+      weatherDetail: [],
     };
   }
 
   componentDidMount() {
-	  console.log(this.props.location.state);
-    if (typeof this.props.location.state !== "undefined") {
-      this.callAPI();
-    }
+    console.log(this.props.location.state.theCitie.capital);
+    this.callAPIDetails(this.props.location.state.theCitie.capital);
   }
 
-  //http://api.openweathermap.org/data/2.5/forecast?q=Kabul&cnt=5&appid=3ca7473536ef714919ad34878d22a7af&units=metric
+  callAPIDetails = async (capital) => {
+    try {
+      //let test=this.props.citie;
+      if (typeof this.props.location.state.theCitie !== "undefined") {
+        const weatherRes = await detailCalls(capital);
 
-  callAPI = async () => {
-    const apiCall1 = await fetch(
-      "http://api.openweathermap.org/data/2.5/forecast?q=" +
-        this.props.history.location.state.citie.capital +
-        "&cnt=5&appid=" +
-        API_key +
-        "&units=metric"
-    );
-    const response = await apiCall1.json();
-    this.responseArray = [];
+        this.setState({ weatherDetail: weatherRes.data.list });
 
-this.i=-1;
-	response.list.forEach((el) => {
-        this.i++;
-		this.responseArray.push({
-			id:this.i,
-			time: el['dt_txt'],
-			tempMin: el["main"]["temp_min"],
-			tempMax: el["main"]["temp_max"],
-			windSpeed: el["wind"]["speed"],
-			windAngle: el["wind"]["deg"],
-			humidity: el["main"]["humidity"],
-			pressure: el["main"]["pressure"],
-			weather:el["weather"][0]["main"],
-			icon:el["weather"][0]["icon"],
-		  });
-        
-      });
+        this.responseArray = [];
 
+        this.i = -1;
+        this.state.weatherDetail.forEach((el) => {
+          this.i++;
+          this.responseArray.push({
+            id: this.i,
+            time: el["dt_txt"],
+            tempMin: el["main"]["temp_min"],
+            tempMax: el["main"]["temp_max"],
+            windSpeed: el["wind"]["speed"],
+            windAngle: el["wind"]["deg"],
+            humidity: el["main"]["humidity"],
+            pressure: el["main"]["pressure"],
+            weather: el["weather"][0]["main"],
+            icon: el["weather"][0]["icon"],
+          });
+        });
 
-	this.setState({ myResponse: this.responseArray });
-	
+        this.setState({ myResponse: this.responseArray });
+        console.log(this.state.myResponse);
+      }
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   render() {
-    if (typeof this.props.history.location.state === "undefined")
+    if (
+      typeof this.props.history.location.state === "undefined" ||
+      typeof this.props.history.location.state.theCitie === "undefined"
+    )
       return (
         <React.Fragment>
           <NavBar2 />
           <h1>no data selected</h1>
         </React.Fragment>
       );
-    else {
+    if ( typeof this.state.myResponse!=="undefined") {
       this.imagePathWeater =
-        "/icons/" + this.props.history.location.state.citie.icon + ".png";
+        "/icons/" + this.props.history.location.state.theCitie.icon + ".png";
 
-      if ( this.state.myResponse.length >0) {
+console.log(this.state);
+
+      if (this.state.myResponse.length > 0) {
+        // console.log("weather detail is");
+
         return (
           <React.Fragment>
             <NavBar2 />
             <br></br>
             <br></br>
 
-            <ActualDay details={this.props.history.location.state.citie} />
+            <ActualDay
+              myWeather={this.state.weatherDetail}
+              details={this.props.history.location.state.theCitie}
+            />
             <br></br>
             <br></br>
 
             <h3 style={{ textAlign: "center" }}>
               Forecast for 5 different times
             </h3>
-            <table className="table" test={true}>
+            <table className="table" >
               <thead style={{ fontSize: 22 }}>
                 <tr>
                   <th>Date and time</th>
-				  <th></th>
-				  <th></th>
+                  <th></th>
+                  <th></th>
                   <th>min temp</th>
                   <th>max temp</th>
                   <th>wind speed</th>
@@ -97,27 +106,21 @@ this.i=-1;
                 </tr>
               </thead>
               <tbody>
-
-
-			  {this.state.myResponse.map((detail) => (
-                   <Detail
-				   key={detail.id}
-				   detail={detail}
-				 />
+                {this.state.myResponse.map((detail) => (
+                  <Detail key={detail.id} detail={detail} />
                 ))}
-			  </tbody>
+              </tbody>
             </table>
           </React.Fragment>
         );
       } else {
-        console.log("loading");
         return (
           <React.Fragment>
             <NavBar2 />
             <br></br>
             <br></br>
 
-            <ActualDay details={this.props.history.location.state.citie} />
+            <p>loading...</p>
             <br></br>
             <br></br>
 
