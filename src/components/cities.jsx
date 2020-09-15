@@ -9,6 +9,10 @@ import "../css-loader.css";
 //import Citie from "./components/citie";
 
 class Cities extends Component {
+  constructor(props) {
+    super(props);
+    this.handleStar = this.handleStar.bind(this);
+  }
   notify = (message) => {
     toast(message);
   };
@@ -43,7 +47,6 @@ class Cities extends Component {
 
         this.state.countriesResponse.forEach((e2) => {
           if (e2.favorite === 0) {
-            
             this.j++;
 
             cit.push(this.state.countriesResponse[e2.id]);
@@ -56,6 +59,19 @@ class Cities extends Component {
 
       if (this.state.inHome === 0) {
         console.log("in home");
+
+        this.cities2 = [];
+        for (let i = 0; i < this.state.countriesResponse.length; i++) {
+          this.state.countriesResponse.forEach((el) => {
+            if (el.id === i) {
+              this.cities2.push(el);
+              this.cities2[this.cities2.length - 1].id = i;
+              return;
+            }
+          });
+        }
+
+        this.setState({ countriesResponse: this.cities2 });
       }
     }
 
@@ -148,6 +164,23 @@ class Cities extends Component {
     this.setState({ countriesResponse: this.pays });
   };
 
+  handleStar(citieId) {
+    if (this.state.inHome === 0)
+      this.notify("you cant pin and unpin in favorite!");
+    else {
+      this.data = this.state.countriesResponse;
+      this.j = -1;
+      this.state.countriesResponse.forEach((el) => {
+        this.j++;
+        if (el.id === citieId) {
+          if (el.favorite === 0) this.data[this.j].favorite = 1;
+          else this.data[this.j].favorite = 0;
+        }
+      });
+      this.setState({ countriesResponse: this.data });
+    }
+  }
+
   render() {
     if (this.state.countriesResponse.length === 0) {
       return null;
@@ -157,7 +190,12 @@ class Cities extends Component {
           <table className="table">
             <tbody>
               {this.state.countriesResponse.map((citie) => (
-                <Citie key={citie.id} id={citie.id} citie={citie} />
+                <Citie
+                  key={citie.id}
+                  id={citie.id}
+                  citie={citie}
+                  onStar={this.handleStar}
+                />
               ))}
             </tbody>
           </table>

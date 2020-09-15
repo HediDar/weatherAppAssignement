@@ -17,42 +17,39 @@ class Citie extends Component {
     //if (refresh === 1) this.setState({ increment: -1 });
 
     try {
-      
-
       const weatherRes = await callWeatherByCitie(
         country.capital,
         country.code
       );
 
       this.setState({ citieWeatherData: weatherRes.data });
-      
     } catch (e) {
       console.log(e);
     }
   };
 
-
-
-  handleStar = () => {
+  /*handleStar = () => {
     if (this.state.fav === 0) {
       this.setState({ fav: 1, StarPath: "/icons/starA.jpg" });
     } else {
       this.setState({ fav: 0, StarPath: "/icons/starD.png" });
     }
-  };
+  };*/
   render() {
     if (this.state.citieWeatherData.length === 0)
       return (
-        
-          <tr><td>loading...</td></tr>
-        
+        <tr>
+          <td>loading...</td>
+        </tr>
       );
     else {
       this.imagePathWeater =
         "/icons/" + this.state.citieWeatherData.weather[0]["icon"] + ".png";
       let tempCelcius = this.state.citieWeatherData["main"]["temp"];
       let temperatureRound = Math.trunc(tempCelcius) + "°";
-
+      if (this.props.citie.favorite === 0)
+        this.starPathing = "/icons/starD.png";
+      else this.starPathing = "/icons/starA.jpg";
       return (
         <tr>
           <td>
@@ -87,9 +84,9 @@ class Citie extends Component {
           <td> {temperatureRound}</td>
           <td>
             <img
-              src={this.state.StarPath}
+              src={this.starPathing}
               style={{ width: 50, height: 35 }}
-              onClick={() => this.handleStar()}
+              onClick={() => this.props.onStar(this.props.citie.id)}
               alt=""
             />
           </td>
