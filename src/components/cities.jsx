@@ -111,7 +111,7 @@ class Cities extends Component {
               this.pays = this.state.countriesResponse;
 
               this.pays.push({
-                id: this.id,
+                id: this.state.countriesResponse.length,
                 name: el2["name"],
                 capital: el2["capital"],
                 code: el2["alpha2Code"],
