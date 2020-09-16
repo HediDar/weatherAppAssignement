@@ -1,9 +1,9 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import NavBar2 from "./navbarHome";
 import Detail from "./detail";
 import ActualDay from "./actualDay";
 import { detailCalls } from "../domain/myAPIS";
-import PropTypes from "prop-types";
 
 class Details extends Component {
   constructor() {
@@ -15,12 +15,14 @@ class Details extends Component {
   }
 
   componentDidMount() {
-    this.callAPIDetails(this.props.location.state.theCitie.capital);
+    const myProps = this.props;
+    this.callAPIDetails(myProps.location.state.theCitie.capital, myProps);
   }
 
-  callAPIDetails = async (capital) => {
+  callAPIDetails = async (capital, myProps) => {
     try {
-      if (typeof this.props.location.state.theCitie !== "undefined") {
+      const myState = this.state;
+      if (typeof myProps.location.state.theCitie !== "undefined") {
         const weatherRes = await detailCalls(capital);
 
         this.setState({ weatherDetail: weatherRes.data.list });
@@ -29,18 +31,18 @@ class Details extends Component {
 
         let i = -1;
         this.state.weatherDetail.forEach((el) => {
-          i++;
+          i += 1;
           this.responseArray.push({
             id: i,
-            time: el["dt_txt"],
-            tempMin: el["main"]["temp_min"],
-            tempMax: el["main"]["temp_max"],
-            windSpeed: el["wind"]["speed"],
-            windAngle: el["wind"]["deg"],
-            humidity: el["main"]["humidity"],
-            pressure: el["main"]["pressure"],
-            weather: el["weather"][0]["main"],
-            icon: el["weather"][0]["icon"],
+            time: el.dt_txt,
+            tempMin: el.main.temp_min,
+            tempMax: el.main.temp_max,
+            windSpeed: el.wind.speed,
+            windAngle: el.wind.deg,
+            humidity: el.main.humidity,
+            pressure: el.main.pressure,
+            weather: el.weather[0].main,
+            icon: el.weather[0].icon,
           });
         });
 
@@ -52,33 +54,36 @@ class Details extends Component {
   };
 
   render() {
+    const myState = this.state;
+    const myProps = this.props;
     if (
-      typeof this.props.location.state === "undefined" ||
-      typeof this.props.location.state.theCitie === "undefined"
+      typeof myProps.history.location.state === "undefined" ||
+      typeof myProps.history.location.state.theCitie === "undefined"
     )
       return (
-        <React.Fragment>
+        <>
           <NavBar2 />
           <h1>no data selected</h1>
-        </React.Fragment>
+        </>
       );
-    if (typeof this.state.myResponse !== "undefined") {
-      this.imagePathWeater =
-        "/icons/" + this.props.location.state.theCitie.icon + ".png";
+    if (typeof myState.myResponse !== "undefined") {
+      this.imagePathWeater = `/icons/${myProps.history.location.state.theCitie.icon}.png`;
 
-      if (this.state.myResponse.length > 0) {
+      if (myState.myResponse.length > 0) {
+        // console.log("weather detail is");
+
         return (
-          <React.Fragment>
+          <>
             <NavBar2 />
-            <br></br>
-            <br></br>
+            <br />
+            <br />
 
             <ActualDay
-              myWeather={this.state.weatherDetail}
-              details={this.props.location.state.theCitie}
+              myWeather={myState.weatherDetail}
+              details={myProps.history.location.state.theCitie}
             />
-            <br></br>
-            <br></br>
+            <br />
+            <br />
 
             <h3 style={{ textAlign: "center" }}>
               Forecast for 5 different times
@@ -87,8 +92,8 @@ class Details extends Component {
               <thead style={{ fontSize: 22 }}>
                 <tr>
                   <th>Date and time</th>
-                  <th></th>
-                  <th></th>
+                  <th aria-label="weather type" />
+                  <th aria-label="weather icon" />
                   <th>min temp</th>
                   <th>max temp</th>
                   <th>wind speed</th>
@@ -98,41 +103,43 @@ class Details extends Component {
                 </tr>
               </thead>
               <tbody>
-                {this.state.myResponse.map((detail) => (
+                {myState.myResponse.map((detail) => (
                   <Detail key={detail.id} detail={detail} />
                 ))}
               </tbody>
             </table>
-          </React.Fragment>
-        );
-      } else {
-        return (
-          <React.Fragment>
-            <NavBar2 />
-            <br></br>
-            <br></br>
-
-            <p>loading...</p>
-            <br></br>
-            <br></br>
-
-            <h3 style={{ textAlign: "center" }}>
-              Forecast for 5 different times
-            </h3>
-            <h5>loading</h5>
-          </React.Fragment>
+          </>
         );
       }
+      return (
+        <>
+          <NavBar2 />
+          <br />
+          <br />
+
+          <p>loading...</p>
+          <br />
+          <br />
+
+          <h3 style={{ textAlign: "center" }}>
+            Forecast for 5 different times
+          </h3>
+          <h5>loading</h5>
+        </>
+      );
     }
+    return null;
   }
 }
 
 Details.propTypes = {
-  theCitie: PropTypes.object,
+  myResponse: PropTypes.array,
+  weatherDetail: PropTypes.array,
 };
 
 Details.defaultProps = {
-  theCitie: {},
+  myResponse: [],
+  weatherDetail: [],
 };
 
 export default Details;

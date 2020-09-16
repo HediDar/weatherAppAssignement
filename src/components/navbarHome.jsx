@@ -1,7 +1,7 @@
 import React from "react";
-
 import { Link } from "react-router-dom";
-const NavBarHome = (props) => {
+
+const NavBarHome = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <button
@@ -13,7 +13,7 @@ const NavBarHome = (props) => {
         aria-expanded="false"
         aria-label="Toggle navigation"
       >
-        <span className="navbar-toggler-icon"></span>
+        <span className="navbar-toggler-icon" />
       </button>
       <div className="collapse navbar-collapse" id="navbarTogglerDemo01">
         <h4 className="nav-links">
@@ -23,8 +23,5 @@ const NavBarHome = (props) => {
     </nav>
   );
 };
-
-
-
 
 export default NavBarHome;

@@ -1,21 +1,24 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { callWeatherByCitie } from "../domain/myAPIS";
 import PropTypes from "prop-types";
-import  roundTemp  from "../utility/conversion";
+import { callWeatherByCitie } from "../domain/myAPIS";
+import roundTemp from "../utility/conversion";
 
 class Citie extends Component {
-  state = {
-    citieWeatherData: [],
-    StarPath: "/icons/starD.png",
-    fav: 0,
-  };
+  constructor() {
+    super();
 
-  componentDidMount() {
-    this.callAPIWeather(this.props.citie, 0);
+    this.state = {
+      citieWeatherData: [],
+    };
   }
 
-  callAPIWeather = async (country, refresh) => {
+  componentDidMount() {
+    const myProps = this.props;
+    this.callAPIWeather(myProps.citie);
+  }
+
+  callAPIWeather = async (country) => {
     try {
       const weatherRes = await callWeatherByCitie(
         country.capital,
@@ -29,69 +32,70 @@ class Citie extends Component {
   };
 
   render() {
-    if (this.state.citieWeatherData.length === 0)
+    const myState = this.state;
+    const myProps = this.props;
+
+    if (myState.citieWeatherData.length === 0)
       return (
         <tr>
           <td>loading...</td>
         </tr>
       );
-    else {
-      this.imagePathWeater =
-        "/icons/" + this.state.citieWeatherData.weather[0]["icon"] + ".png";
 
-      if (this.props.citie.favorite === 0)
-        this.starPathing = "/icons/starD.png";
-      else this.starPathing = "/icons/starA.jpg";
+    this.imagePathWeater = `/icons/${myState.citieWeatherData.weather[0].icon}.png`;
 
-      return (
-        <tr>
-          <td>
-            <img
-              src={this.props.citie.flag}
-              style={{ width: 30, height: 20 }}
-              alt=""
-            />
-          </td>
-          <td>
-            <h5 className="nav-links">
-              <Link
-                to={{
-                  pathname: `/details`,
-                  state: {
-                    weather: this.state.citieWeatherData,
-                    theCitie: this.props.citie,
-                  },
-                }}
-              >
-                {this.props.citie.capital}, {this.props.citie.name}{" "}
-                {this.props.citie.code}
-              </Link>
-            </h5>
-          </td>
-          <td> {this.state.citieWeatherData.weather[0]["main"]}</td>
+    if (myProps.citie.favorite === 0) this.starPathing = "/icons/starD.png";
+    else this.starPathing = "/icons/starA.jpg";
 
-          <td>
-            <img
-              src={this.imagePathWeater}
-              style={{ width: 50, height: 35 }}
-              alt=""
-            />
-          </td>
-          <td>
-            {" "}
-            {roundTemp(this.state.citieWeatherData["main"]["temp"]) + "°"}
-          </td>
-          <td>
-            <img
-              src={this.starPathing}
-              style={{ width: 50, height: 35 }}
-              onClick={() => this.props.onStar(this.props.citie.id)}
-              alt=""
-            />
-          </td>
-        </tr>
-      );
-    }
+    return (
+      <tr>
+        <td>
+          <img
+            src={myProps.citie.flag}
+            style={{ width: 30, height: 20 }}
+            alt=""
+          />
+        </td>
+        <td>
+          <h5 className="nav-links">
+            <Link
+              to={{
+                pathname: `/details`,
+                state: {
+                  weather: myState.citieWeatherData,
+                  theCitie: myProps.citie,
+                },
+              }}
+            >
+              {myProps.citie.capital}, {myProps.citie.name} {myProps.citie.code}
+            </Link>
+          </h5>
+        </td>
+        <td> {myState.citieWeatherData.weather[0].main}</td>
+
+        <td>
+          <img
+            src={this.imagePathWeater}
+            style={{ width: 50, height: 35 }}
+            alt=""
+          />
+        </td>
+        <td>
+          {" "}
+          {roundTemp(myState.citieWeatherData.main.temp)}
+          {"°"}
+        </td>
+        <td>
+          
+          <img
+            src={this.starPathing}
+            style={{ width: 50, height: 35 }}
+            onClick={() => this.props.onStar(this.props.citie.id)} 
+            alt=""
+          />
+        </td>
+      </tr>
+    );
   }
 }
 

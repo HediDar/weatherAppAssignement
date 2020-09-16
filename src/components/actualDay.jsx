@@ -3,9 +3,10 @@ import PropTypes from "prop-types";
 import roundTemp  from "../utility/conversion";
 
 const ActualDay = (props) => {
+  const myProps=props;
   if (
-    typeof props.details === "undefined" ||
-    typeof props.myWeather === "undefined"
+    typeof myProps.details === "undefined" ||
+    typeof myProps.myWeather === "undefined"
   )
     return (
       <>
@@ -14,14 +15,14 @@ const ActualDay = (props) => {
     );
 
   return (
-    <React.Fragment>
+    <>
       <table className="table">
         <thead style={{ fontSize: 22 }}>
           <tr>
-            <th>today's details</th>
-            <th></th>
-            <th></th>
-            <th></th>
+            <th>day details</th>
+            <th aria-label="name of country"/>
+            <th aria-label="the weather"/>
+            <th aria-label="icon weather"/>
             <th>temperature</th>
             <th>humidity</th>
             <th>pressure</th>
@@ -33,34 +34,34 @@ const ActualDay = (props) => {
           <tr>
             <td>
               <img
-                src={props.details.flag}
+                src={myProps.details.flag}
                 style={{ width: 30, height: 20 }}
                 alt=""
               />
             </td>
 
             <td>
-              {props.details.capital}, {props.details.name},{" "}
-              {props.details.code}
+              {myProps.details.capital}, {myProps.details.name},{" "}
+              {myProps.details.code}
             </td>
 
-            <td> {props.myWeather[0].weather[0].main}</td>
+            <td> {myProps.myWeather[0].weather[0].main}</td>
             <td>
-              <img
-                src={"/icons/" + props.myWeather[0].weather[0].icon + ".png"}
+              <img   
+                src={`/icons/${myProps.myWeather[0].weather[0].icon}.png`}
                 style={{ width: 50, height: 35 }}
                 alt=""
               />
             </td>
-            <td> {roundTemp(props.myWeather[0].main.temp) + "°"}</td>
-            <td> {props.myWeather[0].main.humidity}</td>
-            <td> {props.myWeather[0].main.pressure}</td>
-            <td> {props.myWeather[0].wind.speed} km/h</td>
-            <td> {props.myWeather[0].wind.deg}°</td>
+  <td> {roundTemp(myProps.myWeather[0].main.temp)}°</td>
+            <td> {myProps.myWeather[0].main.humidity}</td>
+            <td> {myProps.myWeather[0].main.pressure}</td>
+            <td> {myProps.myWeather[0].wind.speed} km/h</td>
+            <td> {myProps.myWeather[0].wind.deg}°</td>
           </tr>
         </tbody>
       </table>
-    </React.Fragment>
+    </>
   );
 };
 

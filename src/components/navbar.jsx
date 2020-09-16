@@ -14,7 +14,7 @@ const NavBar = (props) => {
         aria-expanded="false"
         aria-label="Toggle navigation"
       >
-        <span className="navbar-toggler-icon"></span>
+        <span className="navbar-toggler-icon" />
       </button>
       <div className="collapse navbar-collapse" id="navbarTogglerDemo01">
         <ul className="navbar-nav mr-auto mt-2 mt-lg-0">
@@ -42,8 +42,9 @@ const NavBar = (props) => {
             className="mr-sm-2"
             placeholder="display another capital"
             aria-label="Search"
-          ></input>
+          />
           <button
+            type="button"
             className="btn btn-outline-success my-2 my-sm-0"
             onClick={() => props.onSearch(searchField.current.value)}
           >

@@ -15,14 +15,12 @@ class Cities extends Component {
       countriesResponse: [],
       AllcountriesResponse: [],
       inHome: 1,
-      searchValue: "",
     };
   }
 
   componentDidMount() {
     const myProps = this.props;
     this.setState({
-      searchValue: myProps.searchValue,
       inHome: myProps.inHome,
     });
     this.CallAPICountries();
@@ -70,56 +68,52 @@ class Cities extends Component {
       }
     }
 
-    if (myProps.searchValue !== myState.searchValue) {
-      this.setState({ searchValue: myProps.searchValue });
-      if (myProps.searchValue.localeCompare("") === 0) {
-        this.notify("you have typed an empty value!");
-      } else {
-        let testHave = 0;
-        let testExists = 0;
-        const loop = myState.countriesResponse;
-        loop.forEach((el) => {
+    let testHave = 0;
+    let testExists = 0;
+    if (myProps.searchValue.localeCompare("") === 0) {
+      this.notify("you have typed an empty value!");
+    } else {
+      const loop = myState.countriesResponse;
+      loop.forEach((el) => {
+        if (
+          el.capital
+            .toUpperCase()
+            .localeCompare(myProps.searchValue.toUpperCase()) === 0
+        )
+          testHave = 1;
+      });
+      // we exclude the vatican and the holy see as countries cause they have the same capital as italy
+      myState.AllcountriesResponse.forEach((el2) => {
+        if (
+          el2.capital
+            .toUpperCase()
+            .localeCompare(myProps.searchValue.toUpperCase()) === 0
+        ) {
+          testExists = 1;
           if (
-            el.capital
-              .toUpperCase()
-              .localeCompare(myProps.searchValue.toUpperCase()) === 0
-          )
-            testHave = 1;
-        });
-        // we exclude the vatican and the holy see as countries cause they have the same capital as italy
-        myState.AllcountriesResponse.forEach((el2) => {
-          if (
-            el2.capital
-              .toUpperCase()
-              .localeCompare(myProps.searchValue.toUpperCase()) === 0
+            testHave === 0 &&
+            el2.name.toUpperCase().localeCompare("vatican".toUpperCase()) !==
+              0 &&
+            el2.name.toUpperCase().localeCompare("holy see".toUpperCase()) !== 0
           ) {
-            testExists = 1;
-            if (
-              testHave === 0 &&
-              el2.name.toUpperCase().localeCompare("vatican".toUpperCase()) !==
-                0 &&
-              el2.name.toUpperCase().localeCompare("holy see".toUpperCase()) !==
-                0
-            ) {
-              const pays = myState.countriesResponse;
+            const pays = myState.countriesResponse;
 
-              pays.push({
-                id: myState.countriesResponse.length,
-                name: el2.name,
-                capital: el2.capital,
-                code: el2.alpha2Code,
-                flag: el2.flag,
-                favorite: 0,
-              });
+            pays.push({
+              id: myState.countriesResponse.length,
+              name: el2.name,
+              capital: el2.capital,
+              code: el2.alpha2Code,
+              flag: el2.flag,
+              favorite: 0,
+            });
 
-              this.setState({ countriesResponse: this.pays });
-            }
+            this.setState({ countriesResponse: pays });
           }
-        });
-        if (testHave === 1) this.notify("capital already displayed!");
-        if (testExists === 0 && testHave === 0) this.notify("not a capital!");
-      }
+        }
+      });
     }
+    if (testHave === 1) this.notify("capital already displayed!");
+    if (testExists === 0 && testHave === 0) this.notify("not a capital!");
   }
 
   notify = (message) => {
@@ -172,8 +166,8 @@ class Cities extends Component {
 
   render() {
     const myState = this.state;
-    if (myState.countriesResponse.length === 0) {
-      return null;
+    if (typeof this.state.countriesResponse === "undefined") {
+      return <h1>loading...</h1>;
     }
     return (
       <div>
