@@ -19,9 +19,9 @@ class Cities extends Component {
   }
 
   componentDidMount() {
-    const myProps = this.props;
+    const { inHome } = this.props;
     this.setState({
-      inHome2: myProps.inHome,
+      inHome2: inHome,
     });
     this.CallAPICountries();
   }
@@ -57,7 +57,7 @@ class Cities extends Component {
 
       if (inHome2 === 0) {
         this.cities2 = [];
-        for (let i = 0; i < countriesResponse.length; i += 1) {
+        for (let i = 0; i < countriesResponse.length; i = +1) {
           countriesResponse.forEach((el) => {
             if (el.id === i) {
               this.cities2.push(el);
@@ -75,15 +75,16 @@ class Cities extends Component {
     if (searchValue.localeCompare("") === 0) {
       this.notify("you have typed an empty value!");
     } else {
-      const { AllcountriesResponse } = this.state;
-
-      countriesResponse.forEach((el) => {
+      const loop = countriesResponse;
+      loop.forEach((el) => {
         if (
           el.capital.toUpperCase().localeCompare(searchValue.toUpperCase()) ===
           0
         )
           testHave = 1;
       });
+
+      const { AllcountriesResponse } = this.state;
       // we exclude the vatican and the holy see as countries cause they have the same capital as italy
       AllcountriesResponse.forEach((el2) => {
         if (

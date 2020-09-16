@@ -41,7 +41,8 @@ class App extends Component {
   };
 
   render() {
-    const item=this.state;
+    const { inHome, searchValue, homePath, favPath } = this.state;
+
     return (
       <Router>
         <>
@@ -53,13 +54,10 @@ class App extends Component {
                 onHome={this.handleHome}
                 onFav={this.handleFav}
                 onNavigate={this.handleNav}
-                homePath={item.homePath}
-                favPath={item.favPath}
+                homePath={homePath}
+                favPath={favPath}
               />
-              <Cities
-                searchValue={item.searchValue}
-                inHome={item.inHome}
-              />
+              <Cities searchValue={searchValue} inHome={inHome} />
             </Route>
           </Switch>
         </>
