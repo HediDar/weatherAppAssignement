@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { callWeatherByCitie } from "../domain/myAPIS";
 import PropTypes from "prop-types";
-import { roundTemp } from "../utility/conversion";
+import  roundTemp  from "../utility/conversion";
 
 class Citie extends Component {
   state = {

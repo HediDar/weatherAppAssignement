@@ -1,6 +1,3 @@
-
-
-
-export function roundTemp(temp) {
+export default function roundTemp(temp) {
   return Math.trunc(temp);
 }

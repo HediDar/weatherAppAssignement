@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { roundTemp } from "../utility/conversion";
+import roundTemp  from "../utility/conversion";
 
 const ActualDay = (props) => {
   if (

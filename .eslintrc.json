@@ -25,6 +25,7 @@
       "jasmine": true
     },
     "rules": {
+      "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
       "no-console": "off",
       "no-alert": "off",
       "global-require":"off",

@@ -1,29 +1,29 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { roundTemp } from "../utility/conversion";
+import  roundTemp  from "../utility/conversion";
 
 const Detail = (props) => {
-  let imagePathWeater = "/icons/" + props.detail.icon + ".png";
-
+  const imagePathWeater = `/icons/${props.detail.icon}.png`;
+  const mydetail = props.detail;
   return (
     <tr>
-      <td>{props.detail.time}</td>
-      <td>{props.detail.weather}</td>
+      <td>{mydetail.time}</td>
+      <td>{mydetail.weather}</td>
       <td>
         <img src={imagePathWeater} style={{ width: 50, height: 30 }} alt="" />
       </td>
-      <td>{roundTemp(props.detail.tempMin) + "°"}</td>
-      <td>{roundTemp(props.detail.tempMax) + "°"}</td>
+      <td>{roundTemp(mydetail.tempMin)}°</td>
+      <td>{roundTemp(mydetail.tempMax)}°</td>
       <td>
-        {props.detail.windSpeed}
+        {mydetail.windSpeed}
         {"km/h"}
       </td>
       <td>
-        {props.detail.windAngle}
+        {mydetail.windAngle}
         {"°"}
       </td>
-      <td>{props.detail.humidity}</td>
-      <td>{props.detail.pressure}</td>
+      <td>{mydetail.humidity}</td>
+      <td>{mydetail.pressure}</td>
     </tr>
   );
 };
