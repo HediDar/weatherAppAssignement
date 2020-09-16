@@ -1,4 +1,3 @@
-//import React from "react";
 import React, { Component } from "react";
 import { countriesCalls } from "../domain/myAPIS";
 import { toast } from "react-toastify";
@@ -6,7 +5,6 @@ import "react-toastify/dist/ReactToastify.css";
 import Citie from "./citie";
 import "../css-loader.css";
 import PropTypes from "prop-types";
-
 
 //import Citie from "./components/citie";
 
@@ -35,19 +33,15 @@ class Cities extends Component {
       if (this.state.inHome === 1) {
         let cit = [];
 
-        this.j = -1;
         ////////i sort the array du favori au non favori
         this.state.countriesResponse.forEach((el) => {
           if (el.favorite === 1) {
-            this.j++;
             cit.push(this.state.countriesResponse[el.id]);
           }
         });
 
         this.state.countriesResponse.forEach((e2) => {
           if (e2.favorite === 0) {
-            this.j++;
-
             cit.push(this.state.countriesResponse[e2.id]);
           }
         });
@@ -57,8 +51,6 @@ class Cities extends Component {
       ///////handle desorting in home
 
       if (this.state.inHome === 0) {
-        console.log("in home");
-
         this.cities2 = [];
         for (let i = 0; i < this.state.countriesResponse.length; i++) {
           this.state.countriesResponse.forEach((el) => {
@@ -79,17 +71,16 @@ class Cities extends Component {
       if (this.props.searchValue.localeCompare("") === 0) {
         this.notify("you have typed an empty value!");
       } else {
-        this.testHave = 0;
-        this.testExists = 0;
-        this.loop = this.state.countriesResponse;
-        console.log(this.props.searchValue.toUpperCase());
-        this.loop.forEach((el) => {
+        let testHave = 0;
+        let testExists = 0;
+        let loop = this.state.countriesResponse;
+        loop.forEach((el) => {
           if (
             el["capital"]
               .toUpperCase()
               .localeCompare(this.props.searchValue.toUpperCase()) === 0
           )
-            this.testHave = 1;
+            testHave = 1;
         });
         //// we exclude the vatican and the holy see as countries cause they have the same capital as italy
         this.state.AllcountriesResponse.forEach((el2) => {
@@ -98,9 +89,9 @@ class Cities extends Component {
               .toUpperCase()
               .localeCompare(this.props.searchValue.toUpperCase()) === 0
           ) {
-            this.testExists = 1;
+            testExists = 1;
             if (
-              this.testHave === 0 &&
+              testHave === 0 &&
               el2["name"]
                 .toUpperCase()
                 .localeCompare("vatican".toUpperCase()) !== 0 &&
@@ -108,9 +99,9 @@ class Cities extends Component {
                 .toUpperCase()
                 .localeCompare("holy see".toUpperCase()) !== 0
             ) {
-              this.pays = this.state.countriesResponse;
+              let pays = this.state.countriesResponse;
 
-              this.pays.push({
+              pays.push({
                 id: this.state.countriesResponse.length,
                 name: el2["name"],
                 capital: el2["capital"],
@@ -123,9 +114,8 @@ class Cities extends Component {
             }
           }
         });
-        if (this.testHave === 1) this.notify("capital already displayed!");
-        if (this.testExists === 0 && this.testHave === 0)
-          this.notify("not a capital!");
+        if (testHave === 1) this.notify("capital already displayed!");
+        if (testExists === 0 && testHave === 0) this.notify("not a capital!");
       }
     }
   }
@@ -139,17 +129,17 @@ class Cities extends Component {
   }
 
   CallAPICountries = async () => {
-    this.pays = [];
-    this.id = -1;
+    let pays = [];
+    let id = -1;
     const responseCountries = await countriesCalls();
     this.setState({ AllcountriesResponse: responseCountries.data });
-    this.k = -1;
+    let k = -1;
     responseCountries.data.forEach((el) => {
-      this.k++;
-      if (this.k < 4) {
-        this.id++;
-        this.pays.push({
-          id: this.id,
+      k++;
+      if (k < 4) {
+        id++;
+        pays.push({
+          id: id,
           name: el["name"],
           capital: el["capital"],
           code: el["alpha2Code"],
@@ -158,23 +148,23 @@ class Cities extends Component {
         });
       }
     });
-    this.setState({ countriesResponse: this.pays });
+    this.setState({ countriesResponse: pays });
   };
 
   handleStar(citieId) {
     if (this.state.inHome === 0)
       this.notify("you cant pin and unpin in favorite!");
     else {
-      this.data = this.state.countriesResponse;
-      this.j = -1;
+      let data = this.state.countriesResponse;
+      let j = -1;
       this.state.countriesResponse.forEach((el) => {
-        this.j++;
+        j++;
         if (el.id === citieId) {
-          if (el.favorite === 0) this.data[this.j].favorite = 1;
-          else this.data[this.j].favorite = 0;
+          if (el.favorite === 0) data[j].favorite = 1;
+          else data[j].favorite = 0;
         }
       });
-      this.setState({ countriesResponse: this.data });
+      this.setState({ countriesResponse: data });
     }
   }
 
@@ -203,19 +193,13 @@ class Cities extends Component {
 }
 
 Cities.propTypes = {
-  AllcountriesResponse: PropTypes.array,
-  countriesResponse: PropTypes.array,
-  increment: PropTypes.number,
-  inHome:PropTypes.number,
-  searchValue:PropTypes.string
+  inHome: PropTypes.number,
+  searchValue: PropTypes.string,
 };
 
 Cities.defaultProps = {
-  AllcountriesResponse: [],
-  countriesResponse: [],
-  increment: -1,
   inHome: 1,
-  searchValue: ""
+  searchValue: "",
 };
 
 export default Cities;

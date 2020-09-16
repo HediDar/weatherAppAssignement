@@ -15,13 +15,11 @@ class Details extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props.location.state.theCitie.capital);
     this.callAPIDetails(this.props.location.state.theCitie.capital);
   }
 
   callAPIDetails = async (capital) => {
     try {
-      //let test=this.props.citie;
       if (typeof this.props.location.state.theCitie !== "undefined") {
         const weatherRes = await detailCalls(capital);
 
@@ -29,11 +27,11 @@ class Details extends Component {
 
         this.responseArray = [];
 
-        this.i = -1;
+        let i = -1;
         this.state.weatherDetail.forEach((el) => {
-          this.i++;
+          i++;
           this.responseArray.push({
-            id: this.i,
+            id: i,
             time: el["dt_txt"],
             tempMin: el["main"]["temp_min"],
             tempMax: el["main"]["temp_max"],
@@ -47,7 +45,6 @@ class Details extends Component {
         });
 
         this.setState({ myResponse: this.responseArray });
-        console.log(this.state.myResponse);
       }
     } catch (e) {
       console.log(e);
@@ -56,8 +53,8 @@ class Details extends Component {
 
   render() {
     if (
-      typeof this.props.history.location.state === "undefined" ||
-      typeof this.props.history.location.state.theCitie === "undefined"
+      typeof this.props.location.state === "undefined" ||
+      typeof this.props.location.state.theCitie === "undefined"
     )
       return (
         <React.Fragment>
@@ -67,13 +64,9 @@ class Details extends Component {
       );
     if (typeof this.state.myResponse !== "undefined") {
       this.imagePathWeater =
-        "/icons/" + this.props.history.location.state.theCitie.icon + ".png";
-
-      console.log(this.state);
+        "/icons/" + this.props.location.state.theCitie.icon + ".png";
 
       if (this.state.myResponse.length > 0) {
-        // console.log("weather detail is");
-
         return (
           <React.Fragment>
             <NavBar2 />
@@ -82,7 +75,7 @@ class Details extends Component {
 
             <ActualDay
               myWeather={this.state.weatherDetail}
-              details={this.props.history.location.state.theCitie}
+              details={this.props.location.state.theCitie}
             />
             <br></br>
             <br></br>
@@ -135,13 +128,11 @@ class Details extends Component {
 }
 
 Details.propTypes = {
-  myResponse: PropTypes.array,
-  weatherDetail: PropTypes.array,
+  theCitie: PropTypes.object,
 };
 
 Details.defaultProps = {
-  myResponse: [],
-  weatherDetail: [],
+  theCitie: {},
 };
 
 export default Details;

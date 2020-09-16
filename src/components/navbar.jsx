@@ -1,4 +1,6 @@
 import React from "react";
+import PropTypes from "prop-types";
+
 const NavBar = (props) => {
   const searchField = React.useRef();
   return (
@@ -51,6 +53,22 @@ const NavBar = (props) => {
       </div>
     </nav>
   );
+};
+
+NavBar.propTypes = {
+  favPath: PropTypes.string,
+  homePath: PropTypes.string,
+  onHome: PropTypes.func,
+  onFav: PropTypes.func,
+  onSearch: PropTypes.func,
+};
+
+NavBar.defaultProps = {
+  favPath: "",
+  homePath: "",
+  onHome: () => {},
+  onFav: () => {},
+  onSearch: () => {},
 };
 
 export default NavBar;

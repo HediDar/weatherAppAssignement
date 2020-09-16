@@ -1,8 +1,9 @@
 import React from "react";
+import PropTypes from "prop-types";
+import { roundTemp } from "../utility/conversion";
+
 const Detail = (props) => {
   let imagePathWeater = "/icons/" + props.detail.icon + ".png";
-  let tempMin = Math.trunc(props.detail.tempMin);
-  let tempMax = Math.trunc(props.detail.tempMax);
 
   return (
     <tr>
@@ -11,14 +12,8 @@ const Detail = (props) => {
       <td>
         <img src={imagePathWeater} style={{ width: 50, height: 30 }} alt="" />
       </td>
-      <td>
-        {tempMin}
-        {"°"}
-      </td>
-      <td>
-        {tempMax}
-        {"°"}
-      </td>
+      <td>{roundTemp(props.detail.tempMin) + "°"}</td>
+      <td>{roundTemp(props.detail.tempMax) + "°"}</td>
       <td>
         {props.detail.windSpeed}
         {"km/h"}
@@ -31,6 +26,15 @@ const Detail = (props) => {
       <td>{props.detail.pressure}</td>
     </tr>
   );
+};
+
+Detail.propTypes = {
+  detail: PropTypes.object,
+};
+
+// Same approach for defaultProps too
+Detail.defaultProps = {
+  detail: {},
 };
 
 export default Detail;

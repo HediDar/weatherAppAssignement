@@ -31,16 +31,16 @@ class App extends Component {
   }
 
   CallAPICountries = async () => {
-    this.pays = [];
-    this.id = -1;
+    let pays = [];
+    let id = -1;
     const responseCountries = await countriesCalls();
-    this.k = -1;
+    let k = -1;
     responseCountries.data.forEach((el) => {
-      this.k++;
-      if (this.k < 3) {
-        this.id++;
-        this.pays.push({
-          id: this.id,
+      k++;
+      if (k < 3) {
+        id++;
+        pays.push({
+          id: id,
           name: el["name"],
           capital: el["capital"],
           code: el["alpha2Code"],
@@ -48,7 +48,7 @@ class App extends Component {
         });
       }
     });
-    this.setState({ countriesResponse: this.pays });
+    this.setState({ countriesResponse: pays });
   };
 
   handleStar = (citieId) => {

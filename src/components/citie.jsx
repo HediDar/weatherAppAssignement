@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { callWeatherByCitie } from "../domain/myAPIS";
 import PropTypes from "prop-types";
-
+import { roundTemp } from "../utility/conversion";
 
 class Citie extends Component {
   state = {
@@ -16,7 +16,6 @@ class Citie extends Component {
   }
 
   callAPIWeather = async (country, refresh) => {
-
     try {
       const weatherRes = await callWeatherByCitie(
         country.capital,
@@ -39,8 +38,7 @@ class Citie extends Component {
     else {
       this.imagePathWeater =
         "/icons/" + this.state.citieWeatherData.weather[0]["icon"] + ".png";
-      let tempCelcius = this.state.citieWeatherData["main"]["temp"];
-      let temperatureRound = Math.trunc(tempCelcius) + "°";
+
       if (this.props.citie.favorite === 0)
         this.starPathing = "/icons/starD.png";
       else this.starPathing = "/icons/starA.jpg";
@@ -79,7 +77,10 @@ class Citie extends Component {
               alt=""
             />
           </td>
-          <td> {temperatureRound}</td>
+          <td>
+            {" "}
+            {roundTemp(this.state.citieWeatherData["main"]["temp"]) + "°"}
+          </td>
           <td>
             <img
               src={this.starPathing}
@@ -95,11 +96,13 @@ class Citie extends Component {
 }
 
 Citie.propTypes = {
-  citieWeatherData: PropTypes.array,
+  citie: PropTypes.object,
+  onStar: PropTypes.func,
 };
 
 Citie.defaultProps = {
-  citieWeatherData: [],
+  citie: {},
+  onStar: () => {},
 };
 
 export default Citie;
