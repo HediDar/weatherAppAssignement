@@ -30,7 +30,7 @@ class Cities extends Component {
     const { searchValue } = this.props;
     const { inHome } = this.props;
     const { inHome2 } = this.state;
-    const myState = this.state;
+    const { countriesResponse } = this.state;
     if (inHome !== inHome2) {
       this.setState({ inHome2: inHome });
 
@@ -39,15 +39,15 @@ class Cities extends Component {
         const cit = [];
 
         //  i sort the array du favori au non favori
-        myState.countriesResponse.forEach((el) => {
+        countriesResponse.forEach((el) => {
           if (el.favorite === 1) {
-            cit.push(myState.countriesResponse[el.id]);
+            cit.push(countriesResponse[el.id]);
           }
         });
 
-        myState.countriesResponse.forEach((e2) => {
+        countriesResponse.forEach((e2) => {
           if (e2.favorite === 0) {
-            cit.push(myState.countriesResponse[e2.id]);
+            cit.push(countriesResponse[e2.id]);
           }
         });
         this.setState({ countriesResponse: cit });
@@ -57,8 +57,8 @@ class Cities extends Component {
 
       if (inHome2 === 0) {
         this.cities2 = [];
-        for (let i = 0; i < myState.countriesResponse.length; i++) {
-          myState.countriesResponse.forEach((el) => {
+        for (let i = 0; i < countriesResponse.length; i += 1) {
+          countriesResponse.forEach((el) => {
             if (el.id === i) {
               this.cities2.push(el);
               this.cities2[this.cities2.length - 1].id = i;
@@ -75,8 +75,9 @@ class Cities extends Component {
     if (searchValue.localeCompare("") === 0) {
       this.notify("you have typed an empty value!");
     } else {
-      const loop = myState.countriesResponse;
-      loop.forEach((el) => {
+      const { AllcountriesResponse } = this.state;
+
+      countriesResponse.forEach((el) => {
         if (
           el.capital.toUpperCase().localeCompare(searchValue.toUpperCase()) ===
           0
@@ -84,7 +85,7 @@ class Cities extends Component {
           testHave = 1;
       });
       // we exclude the vatican and the holy see as countries cause they have the same capital as italy
-      myState.AllcountriesResponse.forEach((el2) => {
+      AllcountriesResponse.forEach((el2) => {
         if (
           el2.capital.toUpperCase().localeCompare(searchValue.toUpperCase()) ===
           0
@@ -96,10 +97,10 @@ class Cities extends Component {
               0 &&
             el2.name.toUpperCase().localeCompare("holy see".toUpperCase()) !== 0
           ) {
-            const pays = myState.countriesResponse;
+            const pays = countriesResponse;
 
             pays.push({
-              id: myState.countriesResponse.length,
+              id: countriesResponse.length,
               name: el2.name,
               capital: el2.capital,
               code: el2.alpha2Code,
