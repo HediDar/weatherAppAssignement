@@ -14,8 +14,8 @@ class Citie extends Component {
   }
 
   componentDidMount() {
-    const myProps = this.props;
-    this.callAPIWeather(myProps.citie);
+    const { citie } = this.props;
+    this.callAPIWeather(citie);
   }
 
   callAPIWeather = async (country) => {
@@ -32,29 +32,26 @@ class Citie extends Component {
   };
 
   render() {
-    const myState = this.state;
-    const myProps = this.props;
+    const { citieWeatherData } = this.state;
+    const { citie } = this.props;
+    const { onStar } = this.props;
 
-    if (myState.citieWeatherData.length === 0)
+    if (citieWeatherData.length === 0)
       return (
         <tr>
           <td>loading...</td>
         </tr>
       );
 
-    this.imagePathWeater = `/icons/${myState.citieWeatherData.weather[0].icon}.png`;
+    this.imagePathWeater = `/icons/${citieWeatherData.weather[0].icon}.png`;
 
-    if (myProps.citie.favorite === 0) this.starPathing = "/icons/starD.png";
+    if (citie.favorite === 0) this.starPathing = "/icons/starD.png";
     else this.starPathing = "/icons/starA.jpg";
 
     return (
       <tr>
         <td>
-          <img
-            src={myProps.citie.flag}
-            style={{ width: 30, height: 20 }}
-            alt=""
-          />
+          <img src={citie.flag} style={{ width: 30, height: 20 }} alt="" />
         </td>
         <td>
           <h5 className="nav-links">
@@ -62,16 +59,16 @@ class Citie extends Component {
               to={{
                 pathname: `/details`,
                 state: {
-                  weather: myState.citieWeatherData,
-                  theCitie: myProps.citie,
+                  weather: citieWeatherData,
+                  theCitie: citie,
                 },
               }}
             >
-              {myProps.citie.capital}, {myProps.citie.name} {myProps.citie.code}
+              {citie.capital}, {citie.name} {citie.code}
             </Link>
           </h5>
         </td>
-        <td> {myState.citieWeatherData.weather[0].main}</td>
+        <td> {citieWeatherData.weather[0].main}</td>
 
         <td>
           <img
@@ -82,15 +79,15 @@ class Citie extends Component {
         </td>
         <td>
           {" "}
-          {roundTemp(myState.citieWeatherData.main.temp)}
+          {roundTemp(citieWeatherData.main.temp)}
           {"°"}
         </td>
         <td>
-          
-          <img
+          <input
+            type="image"
             src={this.starPathing}
             style={{ width: 50, height: 35 }}
-            onClick={() => this.props.onStar(this.props.citie.id)} 
+            onClick={() => onStar(citie.id)}
             alt=""
           />
         </td>
@@ -100,7 +97,14 @@ class Citie extends Component {
 }
 
 Citie.propTypes = {
-  citie: PropTypes.object,
+  citie: PropTypes.shape({
+    id: PropTypes.number,
+    favorite: PropTypes.number,
+    flag: PropTypes.string,
+    code: PropTypes.string,
+    name: PropTypes.string,
+    capital: PropTypes.string,
+  }),
   onStar: PropTypes.func,
 };
 

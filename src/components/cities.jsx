@@ -14,26 +14,28 @@ class Cities extends Component {
     this.state = {
       countriesResponse: [],
       AllcountriesResponse: [],
-      inHome: 1,
+      inHome2: 1,
     };
   }
 
   componentDidMount() {
     const myProps = this.props;
     this.setState({
-      inHome: myProps.inHome,
+      inHome2: myProps.inHome,
     });
     this.CallAPICountries();
   }
 
   componentDidUpdate() {
-    const myProps = this.props;
+    const { searchValue } = this.props;
+    const { inHome } = this.props;
+    const { inHome2 } = this.state;
     const myState = this.state;
-    if (myProps.inHome !== myState.inHome) {
-      this.setState({ inHome: myProps.inHome });
+    if (inHome !== inHome2) {
+      this.setState({ inHome2: inHome });
 
       //  handle sorting in fav
-      if (myState.inHome === 1) {
+      if (inHome2 === 1) {
         const cit = [];
 
         //  i sort the array du favori au non favori
@@ -53,7 +55,7 @@ class Cities extends Component {
 
       //  handle desorting in home
 
-      if (myState.inHome === 0) {
+      if (inHome2 === 0) {
         this.cities2 = [];
         for (let i = 0; i < myState.countriesResponse.length; i++) {
           myState.countriesResponse.forEach((el) => {
@@ -70,24 +72,22 @@ class Cities extends Component {
 
     let testHave = 0;
     let testExists = 0;
-    if (myProps.searchValue.localeCompare("") === 0) {
+    if (searchValue.localeCompare("") === 0) {
       this.notify("you have typed an empty value!");
     } else {
       const loop = myState.countriesResponse;
       loop.forEach((el) => {
         if (
-          el.capital
-            .toUpperCase()
-            .localeCompare(myProps.searchValue.toUpperCase()) === 0
+          el.capital.toUpperCase().localeCompare(searchValue.toUpperCase()) ===
+          0
         )
           testHave = 1;
       });
       // we exclude the vatican and the holy see as countries cause they have the same capital as italy
       myState.AllcountriesResponse.forEach((el2) => {
         if (
-          el2.capital
-            .toUpperCase()
-            .localeCompare(myProps.searchValue.toUpperCase()) === 0
+          el2.capital.toUpperCase().localeCompare(searchValue.toUpperCase()) ===
+          0
         ) {
           testExists = 1;
           if (
@@ -146,13 +146,14 @@ class Cities extends Component {
   };
 
   handleStar(citieId) {
-    const myState = this.state;
-    if (myState.inHome === 0)
-      this.notify("you cant pin and unpin in favorite!");
+    const { inHome2 } = this.state;
+    const { countriesResponse } = this.state;
+
+    if (inHome2 === 0) this.notify("you cant pin and unpin in favorite!");
     else {
-      const data = myState.countriesResponse;
+      const data = countriesResponse;
       let j = -1;
-      myState.countriesResponse.forEach((el) => {
+      countriesResponse.forEach((el) => {
         j += 1;
 
         if (el.id === citieId) {
@@ -166,7 +167,7 @@ class Cities extends Component {
 
   render() {
     const myState = this.state;
-    if (typeof this.state.countriesResponse === "undefined") {
+    if (typeof myState.countriesResponse === "undefined") {
       return <h1>loading...</h1>;
     }
     return (

@@ -2,6 +2,8 @@ import React from "react";
 import PropTypes from "prop-types";
 
 const NavBar = (props) => {
+  const { homePath } = props;
+  const { favPath } = props;
   const searchField = React.useRef();
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -19,16 +21,18 @@ const NavBar = (props) => {
       <div className="collapse navbar-collapse" id="navbarTogglerDemo01">
         <ul className="navbar-nav mr-auto mt-2 mt-lg-0">
           <li className="nav-item active">
-            <img
-              src={props.homePath}
+            <input
+              type="image"
+              src={homePath}
               style={{ width: 40, height: 35 }}
               onClick={() => props.onHome()}
               alt=""
             />
           </li>
           <li className="nav-item">
-            <img
-              src={props.favPath}
+            <input
+              type="image"
+              src={favPath}
               style={{ width: 40, height: 35 }}
               onClick={() => props.onFav()}
               alt=""

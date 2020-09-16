@@ -1,12 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
-import roundTemp  from "../utility/conversion";
+import roundTemp from "../utility/conversion";
 
 const ActualDay = (props) => {
-  const myProps=props;
+  const {details} = props;
+  const {myWeather} = props;
+
   if (
-    typeof myProps.details === "undefined" ||
-    typeof myProps.myWeather === "undefined"
+    typeof details === "undefined" ||
+    typeof myWeather === "undefined"
   )
     return (
       <>
@@ -20,9 +22,9 @@ const ActualDay = (props) => {
         <thead style={{ fontSize: 22 }}>
           <tr>
             <th>day details</th>
-            <th aria-label="name of country"/>
-            <th aria-label="the weather"/>
-            <th aria-label="icon weather"/>
+            <th aria-label="name of country" />
+            <th aria-label="the weather" />
+            <th aria-label="icon weather" />
             <th>temperature</th>
             <th>humidity</th>
             <th>pressure</th>
@@ -34,30 +36,30 @@ const ActualDay = (props) => {
           <tr>
             <td>
               <img
-                src={myProps.details.flag}
+                src={details.flag}
                 style={{ width: 30, height: 20 }}
                 alt=""
               />
             </td>
 
             <td>
-              {myProps.details.capital}, {myProps.details.name},{" "}
-              {myProps.details.code}
+              {details.capital}, {details.name},{" "}
+              {details.code}
             </td>
 
-            <td> {myProps.myWeather[0].weather[0].main}</td>
+            <td> {myWeather[0].weather[0].main}</td>
             <td>
-              <img   
-                src={`/icons/${myProps.myWeather[0].weather[0].icon}.png`}
+              <img
+                src={`/icons/${myWeather[0].weather[0].icon}.png`}
                 style={{ width: 50, height: 35 }}
                 alt=""
               />
             </td>
-  <td> {roundTemp(myProps.myWeather[0].main.temp)}°</td>
-            <td> {myProps.myWeather[0].main.humidity}</td>
-            <td> {myProps.myWeather[0].main.pressure}</td>
-            <td> {myProps.myWeather[0].wind.speed} km/h</td>
-            <td> {myProps.myWeather[0].wind.deg}°</td>
+            <td> {roundTemp(myWeather[0].main.temp)}°</td>
+            <td> {myWeather[0].main.humidity}</td>
+            <td> {myWeather[0].main.pressure}</td>
+            <td> {myWeather[0].wind.speed} km/h</td>
+            <td> {myWeather[0].wind.deg}°</td>
           </tr>
         </tbody>
       </table>
@@ -66,13 +68,20 @@ const ActualDay = (props) => {
 };
 
 ActualDay.propTypes = {
-  details: PropTypes.object,
-  myWeather: PropTypes.array,
+  details: PropTypes.shape({
+    capital: PropTypes.string,
+    name: PropTypes.string,
+    code: PropTypes.string,
+    flag: PropTypes.string,
+    favorite: PropTypes.number,
+    id: PropTypes.number,
+  }),
+  myWeather: PropTypes.arrayOf(PropTypes.object),
 };
 
 ActualDay.defaultProps = {
-  details: {},
-  myWeather: [],
+  details: { id: 0, name: "", capital: "", flag: "", code: "", favorite: 0 },
+  myWeather: [{}],
 };
 
 export default ActualDay;
