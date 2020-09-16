@@ -7,7 +7,6 @@ import "react-toastify/dist/ReactToastify.css";
 import Details from "./components/details";
 import Cities from "./components/cities";
 import NavBar from "./components/navbar";
-import PropTypes from "prop-types";
 
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import "./App.css";
@@ -135,27 +134,4 @@ class App extends Component {
   }
 }
 
-App.propTypes = {
-  myCities: PropTypes.array,
-  favCapitals: PropTypes.array,
-  countriesResponse: PropTypes.array,
-  homePath: PropTypes.string,
-  favPath: PropTypes.string,
-  inFav: PropTypes.number,
-  inHome: PropTypes.number,
-  increment: PropTypes.number,
-  searchValue: PropTypes.string,
-};
-
-App.defaultProps = {
-  myCities: [],
-  favCapitals: [],
-  countriesResponse: [],
-  homePath: "/icons/homeA.png",
-  favPath: "/icons/favD.png",
-  inFav: 0,
-  inHome: 1,
-  increment: -1,
-  searchValue: "",
-};
 export default App;
