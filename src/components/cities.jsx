@@ -26,6 +26,12 @@ class Cities extends Component {
     this.CallAPICountries();
   }
 
+  sendData = () => {
+    const { parentCallback } = this.props;
+    const { countriesResponse } = this.state;
+    parentCallback(countriesResponse);
+  };
+
   componentDidUpdate() {
     const { searchValue } = this.props;
     const { inHome } = this.props;
@@ -145,6 +151,7 @@ class Cities extends Component {
       }
     });
     this.setState({ countriesResponse: pays });
+    this.sendData();
   };
 
   handleStar(citieId) {
@@ -164,19 +171,20 @@ class Cities extends Component {
         }
       });
       this.setState({ countriesResponse: data });
+      this.sendData();
     }
   }
 
   render() {
-    const myState = this.state;
-    if (typeof myState.countriesResponse === "undefined") {
+    const {countriesResponse} = this.state;
+    if (typeof countriesResponse === "undefined") {
       return <h1>loading...</h1>;
     }
     return (
       <div>
         <table className="table">
           <tbody>
-            {myState.countriesResponse.map((citie) => (
+            {countriesResponse.map((citie) => (
               <Citie
                 key={citie.id}
                 id={citie.id}

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Details from "./components/details";
 import Cities from "./components/cities";
+import Citie from "./components/citie";
 import NavBar from "./components/navbar";
 import "./App.css";
 
@@ -13,8 +14,8 @@ class App extends Component {
       inHome: 1,
       homePath: "/icons/homeA.png",
       favPath: "/icons/favD.png",
-
       searchValue: "",
+      citiesFetched: [],
     };
   }
 
@@ -40,9 +41,24 @@ class App extends Component {
     });
   };
 
+  callbackFunction = (childData) => {
+    const cit = [];
+
+    //  i sort the array du favori au non favori
+    childData.forEach((el) => {
+      if (el.favorite === 1) {
+        cit.push(childData[el.id]);
+      }
+    });
+
+    
+    this.setState({ citiesFetched: cit });
+    console.log(this.state.citiesFetched);
+  };
+
   render() {
     const { inHome, searchValue, homePath, favPath } = this.state;
-
+ const {citiesFetched}=this.state;
     return (
       <Router>
         <>
@@ -57,9 +73,29 @@ class App extends Component {
                 homePath={homePath}
                 favPath={favPath}
               />
-              <Cities searchValue={searchValue} inHome={inHome} />
+              <Cities
+                citiesFetched={this.citiesFetched}
+                parentCallback={this.callbackFunction}
+                searchValue={searchValue}
+                inHome={inHome}
+              />
             </Route>
           </Switch>
+
+          <br />
+          <br />
+          <br />
+          <tbody>
+            {" "}
+            {citiesFetched.map((citie) => (
+              <Citie
+                key={citie.id}
+                id={citie.id}
+                citie={citie}
+                onStar={this.handleStar}
+              />
+            ))}
+          </tbody>
         </>
       </Router>
     );
